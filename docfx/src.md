@@ -15,6 +15,10 @@ _layout: landing
     --card-text: #24292e;
     --card-meta: #57606a;
     --card-link: #0969da;
+
+    --input-valid: #93dde7;
+    --input-invalid: #ff7a7a;
+    --input-form: #E8F0FE;
   }
 
   [data-bs-theme="dark"] {
@@ -24,6 +28,10 @@ _layout: landing
     --card-text: #cdd9e5;
     --card-meta: #8b949e;
     --card-link: #58a6ff;
+
+    --input-valid: #6c4492;
+    --input-invalid: #ad0000;
+    --input-form: #0C0C0C;
   }
 
   #project-grid {
@@ -65,7 +73,7 @@ _layout: landing
     &>div {
       font-size: 0.875rem;
       color: var(--card-meta);
-      border-top: 1px solid var(--card-border);
+      border-top: 2px solid var(--card-border);
       padding-top: 0.75rem;
       display: flex;
       flex-wrap: wrap;
@@ -87,7 +95,41 @@ _layout: landing
     opacity: 0.5;
     filter: grayscale(1);
   }
+
+  #uuid-form {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    margin: 0 auto 1.5rem;
+    width: fit-content;
+  }
+
+  #input {
+    width: 40ch;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid var(--card-border);
+    border-radius: 0.5rem;
+    background: var(--input-form);
+    color: var(--card-text);
+    font-size: 0.825rem;
+    outline: none;
+    transition: border-color 0.35s;
+
+    &:focus {
+      border-color: var(--input-valid);
+    }
+
+    &:not(:placeholder-shown):invalid {
+      border-color: var(--input-invalid);
+    }
+  }
 </style>
+
+<form id="uuid-form">
+  <input id="input" type="text" required maxlength="36" minlength="36"
+    pattern="[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}"
+    placeholder="xxxxxxxx-xxxx-4xxx-89ab-xxxxxxxxxxxx">
+</form>
 
 <section id="project-grid">
 
@@ -102,17 +144,42 @@ _layout: landing
 
 </section>
 
-<script>
+<script type="module">
   function IsValidUUIDv4(uuid) {
     return /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/.test(uuid)
   }
 
   const uuid = new URLSearchParams(window.location.search).get("uuid")
+  const input = document.getElementById('input')
   if (uuid)
-    if (IsValidUUIDv4(uuid)) {
-      const dir1 = uuid.substring(0, 2)
-      const dir2 = uuid.substring(2, 4)
-      const name = uuid.substring(4)
-      window.location.replace(`./${dir1}/${dir2}/${name}.html`)
-    } else alert("not vaild uuid")
+    if (IsValidUUIDv4(uuid))
+      Go(uuid)
+    else {
+      input.value = uuid
+      input.reportValidity()
+    }
+
+  input.addEventListener('focus', async function () {
+    try {
+      const text = (await navigator.clipboard.readText()).trim()
+
+      if (IsValidUUIDv4(text)) {
+        this.value = text
+        this.dispatchEvent(new Event('input', { bubbles: true }))
+      }
+    } catch (_) { }
+  })
+
+  const form = document.getElementById('uuid-form')
+  form.addEventListener('submit', function Jump(e) {
+    e.preventDefault()
+    Go(input.value)
+  })
+
+  function Go(uuid) {
+    const dir1 = uuid.substring(0, 2)
+    const dir2 = uuid.substring(2, 4)
+    const name = uuid.substring(4)
+    window.location.replace(`./${dir1}/${dir2}/${name}.html`)
+  }
 </script>
