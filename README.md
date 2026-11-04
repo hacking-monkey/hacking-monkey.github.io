@@ -3,7 +3,9 @@
 
 > 给猴子一台打字机，它迟早能敲出你的下一段灵感。
 
-这是一个基于 **GUID 永久标识** 和 **分层文件系统** 的创意素材仓库。每一则灵感、人设、场景、对白都被切割成独立的“切片”，用 UUID v4 作为唯一身份证，通过 `href` 建立永不腐化的关联网络。
+这是一个基于 **GUID 永久标识** 和 **分层文件系统** 的创意素材仓库。
+每一则灵感、人设、场景、对白都被切割成独立的“切片”，用 UUID v4 作为唯一
+身份证，通过 `href` 建立永不腐化的关联网络。
 
 ## 设计哲学
 
@@ -32,5 +34,7 @@
 在任意 Markdown 中，使用相对路径或绝对路径链接：
 
 ```markdown
-参见 <a href="/src.html?uuid=xxxxxxxx-xxxx-4xxx-xxxx-xxxxxxxxxxxx">这个角色设定</a>。
+参见 [这个角色设定][ref]。
+
+[ref]: /src.html?uuid=xxxxxxxx-xxxx-4xxx-89ab-xxxxxxxxxxxx
 ```

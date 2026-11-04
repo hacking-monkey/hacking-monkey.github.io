@@ -1,8 +1,9 @@
 ---
 title: src
 author: chz-cn
+license: CC BY 4.0
+create_at: 2026-09-01
 
-_appFooter: update_at 2026-09-01
 _layout: landing
 ---
 
@@ -138,7 +139,7 @@ _layout: landing
     <p>the pice 00</p>
     <div>
       <time datetime="2026-09-01"></time>
-      <span data-c="0"></span>
+      <span data-c="5"></span>
     </div>
   </article>
 
